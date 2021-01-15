@@ -1,0 +1,60 @@
+<template>
+  <div class="plans">
+      <div>Plans</div>
+      <div>
+        <select class="healtPlans">
+          <option v-for="(option,index) in planList" :key="index" :text="option.name"
+          :value="option.value">{{ option.name }}</option>
+
+        </select>
+      </div>
+  </div>
+</template>
+
+<script>
+const RelianceRequest = require('../lib/RelianceHMO_Requests');
+const Credentials = require('../lib/Credentials');
+
+export default {
+  name: 'Main',
+  data() {
+    return {
+      planList: [],
+    };
+  },
+  async mounted() {
+    const plans = await RelianceRequest.Plans({
+      sandbox_key: Credentials.sandbox_key,
+      host: '',
+      params: { type: 'family', package: 'custom' },
+    });
+    this.planList.push({ name: 'Select Plan:.', value: '' });
+    // console.log(JSON.stringify(plans));
+    if (plans.message === 'OK') {
+      plans.data.data.plans.forEach((plan) => {
+        const { id, name } = plan;
+        this.planList.push({ name, value: id });
+        // console.log(`${id} -.- ${name}`);
+      });
+    }
+  },
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+</style>
