@@ -3,7 +3,7 @@
     <div class="plans">
         <div>Plans</div>
         <div>
-          <select class="healtPlans">
+          <select @change="actOnSelectedPlan"  v-model="selectedPlan" class="healtPlans">
             <option v-for="(option,index) in planList" :key="index" :text="option.name"
             :value="option.value">{{ option.name }}</option>
 
@@ -29,7 +29,17 @@ export default {
     return {
       planList: [],
       showNibssSection: false,
+      selectedPlan: '',
     };
+  },
+  methods: {
+    actOnSelectedPlan() {
+      if (this.selectedPlan.toString().trim().length > 0) {
+        this.showNibssSection = true;
+      } else {
+        this.showNibssSection = false;
+      }
+    },
   },
   async mounted() {
     const plans = await RelianceRequest.Plans({

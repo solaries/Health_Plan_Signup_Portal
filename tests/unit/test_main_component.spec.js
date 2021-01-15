@@ -20,13 +20,16 @@ describe('Validate Plans drop down', () => {
     } while (wrapper.find('.healtPlans').element.innerHTML === '');
     // console.log(wrapper.find('.healtPlans').element);
     expect(wrapper.find('.healtPlans').element.length > 1).toBe(true);
-  });
+  }, 10000);
 
   it('check if NIBSS section is visible', () => {
     expect(wrapper.find('.NIBSS').element == null).toBe(true);
   });
-  it('select plan', () => {
+  it('select plan and result in th NIBSS sectin being visible', async () => {
     wrapper.find('.healtPlans').element[1].selected = true;
-    expect(wrapper.find('.healtPlans').element.value.trim().length > 0).toBe(true);
+    wrapper.find('.healtPlans').trigger('change');
+    await wrapper.vm.$nextTick();
+    // console.log(wrapper.find('.NIBSS').element.innerHTML);
+    expect(wrapper.find('.NIBSS').element == null).toBe(false);
   });
 });
