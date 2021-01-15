@@ -6,14 +6,17 @@
           <select @change="actOnSelectedPlan"  v-model="selectedPlan" class="healtPlans">
             <option v-for="(option,index) in planList" :key="index" :text="option.name"
             :value="option.value">{{ option.name }}</option>
-
           </select>
         </div>
     </div>
     <div class="NIBSS" v-if="showNibssSection">
         <div>BVN</div>
         <div>
-          <input type="text" size="11">
+          <input class="bvnField" @keyup="validateBVN" type="text" size="11" v-model="bvnValue">
+        </div>
+        <div>
+          <button class="bvnButton" :disabled="bvnButtonEnabled"
+          @click="getBVN_details">Validate BVN</button>
         </div>
     </div>
   </div>
@@ -29,7 +32,9 @@ export default {
     return {
       planList: [],
       showNibssSection: false,
+      bvnButtonEnabled: false,
       selectedPlan: '',
+      bvnValue: '',
     };
   },
   methods: {
@@ -39,6 +44,12 @@ export default {
       } else {
         this.showNibssSection = false;
       }
+    },
+    validateBVN() {
+      this.showNibssSection = !!this.showNibssSection;
+    },
+    getBVN_details() {
+      this.showNibssSection = !!this.showNibssSection;
     },
   },
   async mounted() {

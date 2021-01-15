@@ -15,6 +15,10 @@ describe('Validate Plans drop down', () => {
   });
 
   it('wait for plan retreival, check plans dropdown population', async () => {
+    /*when the component loads it does a http get to retreive plans. 
+    these plans (at least one) would be loaded to the plans dropdown. the test finishes before 
+    the HTTP request is complete. This loop makes the test wait for the HTTP request to compele
+    */
     do {
       await sleep(1000);
     } while (wrapper.find('.healtPlans').element.innerHTML === '');
@@ -28,14 +32,27 @@ describe('Validate Plans drop down', () => {
   it('select plan and result in th NIBSS sectin being visible', async () => {
     wrapper.find('.healtPlans').element[1].selected = true;
     wrapper.find('.healtPlans').trigger('change');
+    //ensure the v-if of the  NIBSS section to validates and renders changes
     await wrapper.vm.$nextTick();
-    // console.log(wrapper.find('.NIBSS').element.innerHTML);
     expect(wrapper.find('.NIBSS').element == null).toBe(false);
   });
-  it('select no plan and result in th NIBSS sectin being invisible', async () => {
+  it('select no plan and result in the NIBSS section being invisible', async () => {
     wrapper.find('.healtPlans').element[0].selected = true;
     wrapper.find('.healtPlans').trigger('change');
+    //ensure the v-if of the  NIBSS section to validates and renders changes
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.NIBSS').element == null).toBe(true);
   });
+
+  it('check if BVN textbox exists', async () => {
+    wrapper.find('.healtPlans').element[1].selected = true;
+    wrapper.find('.healtPlans').trigger('change');
+    //ensure the v-if of the  NIBSS section to validates and renders changes
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.bvnField').element.value).toBe('');
+  });
+  it('check if BVN validation button exists', async () => {
+    expect(wrapper.find('.bvnButton').element.value).toBe('');
+  });
+
 });
