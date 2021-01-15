@@ -32,4 +32,10 @@ describe('Validate Plans drop down', () => {
     // console.log(wrapper.find('.NIBSS').element.innerHTML);
     expect(wrapper.find('.NIBSS').element == null).toBe(false);
   });
+  it('select no plan and result in th NIBSS sectin being invisible', async () => {
+    wrapper.find('.healtPlans').element[0].selected = true;
+    wrapper.find('.healtPlans').trigger('change');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.NIBSS').element == null).toBe(true);
+  });
 });
