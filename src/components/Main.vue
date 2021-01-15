@@ -7,7 +7,13 @@
           :value="option.value">{{ option.name }}</option>
 
         </select>
-      </div>
+      </div> 
+  </div>
+  <div class="NIBSS" v-if="showNibssSection">
+      <div>BVN</div>
+      <div>
+        <input type="text" size="11">
+      </div> 
   </div>
 </template>
 
@@ -20,6 +26,7 @@ export default {
   data() {
     return {
       planList: [],
+      showNibssSection: false,
     };
   },
   async mounted() {
