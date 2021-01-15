@@ -22,11 +22,11 @@ describe('Validate Plans drop down', () => {
     expect(wrapper.find('.healtPlans').element.length > 1).toBe(true);
   });
 
+  it('check if NIBSS section is visible', () => {
+    expect(wrapper.find('.NIBSS').element == null).toBe(true);
+  });
   it('select plan', () => {
     wrapper.find('.healtPlans').element[1].selected = true;
     expect(wrapper.find('.healtPlans').element.value.trim().length > 0).toBe(true);
-  });
-  it('check if NIBSS section is visible', () => {
-    expect(wrapper.find('.NIBSS').element.innerHTML).toBe('11');
   });
 });

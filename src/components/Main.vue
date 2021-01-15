@@ -1,19 +1,21 @@
 <template>
-  <div class="plans">
-      <div>Plans</div>
-      <div>
-        <select class="healtPlans">
-          <option v-for="(option,index) in planList" :key="index" :text="option.name"
-          :value="option.value">{{ option.name }}</option>
+  <div>
+    <div class="plans">
+        <div>Plans</div>
+        <div>
+          <select class="healtPlans">
+            <option v-for="(option,index) in planList" :key="index" :text="option.name"
+            :value="option.value">{{ option.name }}</option>
 
-        </select>
-      </div> 
-  </div>
-  <div class="NIBSS" v-if="showNibssSection">
-      <div>BVN</div>
-      <div>
-        <input type="text" size="11">
-      </div> 
+          </select>
+        </div>
+    </div>
+    <div class="NIBSS" v-if="showNibssSection">
+        <div>BVN</div>
+        <div>
+          <input type="text" size="11">
+        </div>
+    </div>
   </div>
 </template>
 
