@@ -76,4 +76,11 @@ describe('Validate BVN Section', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.NIBSS').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
   });
+  it('check if non numerics are removed from BVN textbox', async () => {
+    wrapper.find('.bvnField').setValue('1A3A5B7B9c1C');
+    wrapper.find('.bvnField').trigger('keyup');
+    // ensure the v-if of the  NIBSS section to validates and renders changes
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.bvnField').element.value === '1A3A5B7B9c1C').toBe(false);
+  });
 });

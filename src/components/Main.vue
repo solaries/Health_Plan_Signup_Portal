@@ -19,6 +19,12 @@
           @click="getBVN_details">Validate BVN</button>
         </div>
     </div>
+    <div class="badBVN" v-if="showNibssSection">
+        <div>Bad BVN</div>
+    </div>
+    <div class="errorValidatingBVN" v-if="showNibssSection">
+        <div>Error BVN</div>
+    </div>
   </div>
 </template>
 
@@ -46,6 +52,12 @@ export default {
       }
     },
     validateBVN() {
+      const bvnValue = this.bvnValue.toString();
+      bvnValue.split('').forEach((character) => {
+        if ('1234567890'.indexOf(character) === -1) {
+          this.bvnValue = this.bvnValue.toString().split(character).join('');
+        }
+      });
       if (this.bvnValue.toString().length === 11) {
         this.bvnButtonEnabled = true;
       } else {
@@ -55,7 +67,7 @@ export default {
       this.showNibssSection = !!this.showNibssSection;
     },
     getBVN_details() {
-      this.showNibssSection = !!this.showNibssSection;
+      this.bvnValue = this.bvnValue.toString();
     },
   },
   async mounted() {
