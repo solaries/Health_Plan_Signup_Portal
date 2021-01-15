@@ -15,7 +15,7 @@ describe('Validate Plans drop down', () => {
   });
 
   it('wait for plan retreival, check plans dropdown population', async () => {
-    /*when the component loads it does a http get to retreive plans. 
+    /* when the component loads it does a http get to retreive plans. 
     these plans (at least one) would be loaded to the plans dropdown. the test finishes before 
     the HTTP request is complete. This loop makes the test wait for the HTTP request to compele
     */
@@ -32,27 +32,48 @@ describe('Validate Plans drop down', () => {
   it('select plan and result in th NIBSS sectin being visible', async () => {
     wrapper.find('.healtPlans').element[1].selected = true;
     wrapper.find('.healtPlans').trigger('change');
-    //ensure the v-if of the  NIBSS section to validates and renders changes
+    // ensure the v-if of the  NIBSS section to validates and renders changes
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.NIBSS').element == null).toBe(false);
   });
   it('select no plan and result in the NIBSS section being invisible', async () => {
     wrapper.find('.healtPlans').element[0].selected = true;
     wrapper.find('.healtPlans').trigger('change');
-    //ensure the v-if of the  NIBSS section to validates and renders changes
+    // ensure the v-if of the  NIBSS section to validates and renders changes
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.NIBSS').element == null).toBe(true);
   });
-
+});
+describe('Validate BVN Section', () => {
   it('check if BVN textbox exists', async () => {
     wrapper.find('.healtPlans').element[1].selected = true;
     wrapper.find('.healtPlans').trigger('change');
-    //ensure the v-if of the  NIBSS section to validates and renders changes
+    // ensure the v-if of the  NIBSS section to validates and renders changes
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.bvnField').element.value).toBe('');
   });
   it('check if BVN validation button exists', async () => {
     expect(wrapper.find('.bvnButton').element.value).toBe('');
   });
-
+  it('check if BVN textbox is than 11 digits', async () => {
+    wrapper.find('.bvnField').setValue('12345678901');
+    wrapper.find('.bvnField').trigger('keyup');
+    // ensure the v-if of the  NIBSS section to validates and renders changes
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.NIBSS').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
+  });
+  it('check if BVN textbox is less than 11 digits', async () => {
+    wrapper.find('.bvnField').setValue('123');
+    wrapper.find('.bvnField').trigger('keyup');
+    // ensure the v-if of the  NIBSS section to validates and renders changes
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.NIBSS').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
+  it('check if BVN textbox is greater than 11 digits', async () => {
+    wrapper.find('.bvnField').setValue('123456789012');
+    wrapper.find('.bvnField').trigger('keyup');
+    // ensure the v-if of the  NIBSS section to validates and renders changes
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.NIBSS').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
 });

@@ -15,7 +15,7 @@
           <input class="bvnField" @keyup="validateBVN" type="text" size="11" v-model="bvnValue">
         </div>
         <div>
-          <button class="bvnButton" :disabled="bvnButtonEnabled"
+          <button class="bvnButton" :disabled="bvnButtonEnabled == false"
           @click="getBVN_details">Validate BVN</button>
         </div>
     </div>
@@ -46,6 +46,12 @@ export default {
       }
     },
     validateBVN() {
+      if (this.bvnValue.toString().length === 11) {
+        this.bvnButtonEnabled = true;
+      } else {
+        this.bvnButtonEnabled = false;
+      }
+
       this.showNibssSection = !!this.showNibssSection;
     },
     getBVN_details() {
