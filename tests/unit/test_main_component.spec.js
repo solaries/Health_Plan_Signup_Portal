@@ -18,10 +18,12 @@ describe('Validate Plans drop down', () => {
     /* when the component loads it does a http get to retreive plans. 
     these plans (at least one) would be loaded to the plans dropdown. the test finishes before 
     the HTTP request is complete. This loop makes the test wait for the HTTP request to compele
-    */
+    */ 
+    let checkCount = 0;
     do {
       await sleep(1000);
-    } while (wrapper.find('.healtPlans').element.innerHTML === '');
+      checkCount += 1;
+    } while (wrapper.find('.healtPlans').element.innerHTML === '' && checkCount < 11);
     // console.log(wrapper.find('.healtPlans').element);
     expect(wrapper.find('.healtPlans').element.length > 1).toBe(true);
   }, 10000);
@@ -58,28 +60,28 @@ describe('Validate BVN Section', () => {
   it('check if BVN textbox is than 11 digits', async () => {
     wrapper.find('.bvnField').setValue('12345678901');
     wrapper.find('.bvnField').trigger('keyup');
-    // ensure the v-if of the  NIBSS section to validates and renders changes
+    // ensure the BVN field text change has affected the BVN button accordingly
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.NIBSS').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
   });
   it('check if BVN textbox is less than 11 digits', async () => {
     wrapper.find('.bvnField').setValue('123');
     wrapper.find('.bvnField').trigger('keyup');
-    // ensure the v-if of the  NIBSS section to validates and renders changes
+    // ensure the BVN field text change has affected the BVN button accordingly
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.NIBSS').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
   });
   it('check if BVN textbox is greater than 11 digits', async () => {
     wrapper.find('.bvnField').setValue('123456789012');
     wrapper.find('.bvnField').trigger('keyup');
-    // ensure the v-if of the  NIBSS section to validates and renders changes
+    // ensure the BVN field text change has affected the BVN button accordingly
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.NIBSS').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
   });
   it('check if non numerics are removed from BVN textbox', async () => {
     wrapper.find('.bvnField').setValue('1A3A5B7B9c1C');
     wrapper.find('.bvnField').trigger('keyup');
-    // ensure the v-if of the  NIBSS section to validates and renders changes
+    // ensure the BVN field text change has affected the BVN button accordingly
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.bvnField').element.value === '1A3A5B7B9c1C').toBe(false);
   });
@@ -92,7 +94,5 @@ describe('Validate BVN Section', () => {
   it('check if BVN validation Error section is visible', () => {
     expect(wrapper.find('.errorValidatingBVN').element == null).toBe(true);
   });
-
-
   
 });
