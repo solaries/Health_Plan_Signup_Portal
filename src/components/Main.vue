@@ -54,7 +54,12 @@
           Submit Plan</button>
         </div>
     </div>
- 
+    <div class="formSubmitSuccessful" v-if="showFormSubmitSuccessSection">
+        <div>Form Submited successfully</div>
+    </div>
+    <div class="formSubmitError" v-if="showFormSubmitErrorSection">
+        <div>Error Submiting form: Please try again, if there message continues, please contact support</div>
+    </div>
   </div>
 </template>
 
@@ -74,6 +79,8 @@ export default {
       showInvalidBVNSection: false,
       showBVNValidationErroSection: false,
       showPlanFormSection: false,
+      showFormSubmitSuccessSection: false,
+      showFormSubmitErrorSection: false,
       selectedPlan: '',
       bvnValue: '',
       firstName: '',

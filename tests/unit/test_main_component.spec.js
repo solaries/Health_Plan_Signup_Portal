@@ -229,4 +229,38 @@ describe('Validate Plan Form Section', () => {
     expect(wrapper.find('.formSubmitError').element == null).toBe(true);
   });
 
+
+  it('Validate plan form submit', async () => {
+    wrapper.find('.firstName').setValue('John');
+    wrapper.find('.firstName').trigger('keyup');
+    wrapper.find('.lastName').setValue('Doe');
+    wrapper.find('.lastName').trigger('keyup');
+    wrapper.find('.email').setValue('testuser1@kang.pe');
+    wrapper.find('.email').trigger('keyup');
+    wrapper.find('.email').setValue('testuser1@kang.pe');
+    wrapper.find('.email').trigger('keyup');
+    wrapper.find('.phone').setValue('08132646940');
+    wrapper.find('.phone').trigger('keyup');
+    // ensure the text field changes has affected the Submit Form button accordingly
+    await wrapper.vm.$nextTick();
+    // then check that Submit Form button is enabled
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
+    wrapper.find('.submitForm').trigger('click');
+
+    let checkCount = 0;
+    do {
+      await sleep(1000);
+      // ensure the submit Form button click has affected the plan form, form submission successful,
+      // or form submission error section accordingly
+      await wrapper.vm.$nextTick();
+      checkCount += 1;
+    } while ((wrapper.find('.PlanForm').element != null
+    && wrapper.find('.formSubmitSuccessful').element == null
+    && wrapper.find('.formSubmitError').element == null) === true && checkCount < 11);
+    const effectOfFormSubmission = (wrapper.find('.PlanForm').element != null
+    && wrapper.find('.formSubmitSuccessful').element == null
+    && wrapper.find('.formSubmitError').element == null);
+    expect(effectOfFormSubmission).toBe(false);
+  }, 12000);
+
 });
