@@ -119,3 +119,17 @@ describe('Validate BVN Section', () => {
     expect(effectOfBvnValidation).toBe(false);
   }, 12000);
 });
+describe('Validate Plan Form Section', () => {
+  it('check if first name textbox exists', async () => {
+    expect(wrapper.find('.firstName').element.value).toBe('');
+  });
+  it('check if last name textbox exists', async () => {
+    expect(wrapper.find('.lastName').element.value).toBe('');
+  });
+  it('check if email textbox exists', async () => {
+    expect(wrapper.find('.email').element.value).toBe('');
+  });
+  it('check if phone number textbox exists', async () => {
+    expect(wrapper.find('.phone').element.value).toBe('');
+  });
+});
