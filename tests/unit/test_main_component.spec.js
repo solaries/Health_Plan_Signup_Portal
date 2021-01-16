@@ -138,4 +138,88 @@ describe('Validate Plan Form Section', () => {
   it('check if Plan Form Submission button exists', async () => {
     expect(wrapper.find('.submitForm').element.value).toBe('');
   });
+  it('check if first name textbox is less than 1 character', async () => {
+    wrapper.find('.firstName').setValue('');
+    wrapper.find('.firstName').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
+  it('check if first name textbox is more than 20 characters', async () => {
+    wrapper.find('.firstName').setValue('ikemefunaoyemajukwukamarama');
+    wrapper.find('.firstName').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
+  it('check if first name textbox is below or equal 20 characters', async () => {
+    wrapper.find('.firstName').setValue('samson');
+    wrapper.find('.firstName').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
+  });
+  it('check if last name textbox is less than 1 character', async () => {
+    wrapper.find('.lastName').setValue('');
+    wrapper.find('.lastName').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
+  it('check if last name textbox is more than 20 characters', async () => {
+    wrapper.find('.lastName').setValue('ikemefunaoyemajukwukamarama');
+    wrapper.find('.lastName').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
+  it('check if last name textbox is below or equal 20 characters', async () => {
+    wrapper.find('.lastName').setValue('adeline');
+    wrapper.find('.lastName').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
+  });
+  it('check if email textbox is less than 5 characters', async () => {
+    wrapper.find('.email').setValue('');
+    wrapper.find('.email').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
+  it('check if email textbox is more than 50 characters', async () => {
+    wrapper.find('.email').setValue('ikemefunaoyemajukwukamarama@yahooforthelifeofmewhenishould.com');
+    wrapper.find('.email').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
+  it('check if email textbox is below or equal 50 characters but more than 5 characters', async () => {
+    wrapper.find('.email').setValue('adeline@yahoo.com');
+    wrapper.find('.email').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
+  });
+  it('check if phone textbox is less than 11 digits', async () => {
+    wrapper.find('.phone').setValue('123');
+    wrapper.find('.phone').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
+  it('check if phone textbox is more than 11 digits', async () => {
+    wrapper.find('.phone').setValue('123456789012345');
+    wrapper.find('.phone').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(true);
+  });
+  it('check if phone textbox is below or equal 20 digits', async () => {
+    wrapper.find('.phone').setValue('12345678901');
+    wrapper.find('.phone').trigger('keyup');
+    // ensure the first name field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
+  });
 });

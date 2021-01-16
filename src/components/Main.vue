@@ -31,23 +31,27 @@
         <div><h1>Customer Informatiion Form</h1></div>
         <div>First Name</div>
         <div>
-          <input class="firstName"  type="text" size="20" >
+          <input class="firstName"  @keyup="validateFormFieldsFirstName"
+           type="text" size="20" v-model="firstName" >
         </div>
         <div>Last Name</div>
         <div>
-          <input class="lastName"  type="text" size="20" >
+          <input class="lastName"   @keyup="validateFormFieldsLastName"
+            type="text" size="20" v-model="lastName"  >
         </div>
         <div>Email</div>
         <div>
-          <input class="email"  type="text" size="50" >
+          <input class="email"   @keyup="validateFormFieldsEmail"
+            type="text" size="50"  v-model="email" >
         </div>
         <div>Phone</div>
         <div>
-          <input class="phone"  type="text" size="11" >
+          <input class="phone"   @keyup="validateFormFieldsPhone"
+          type="text" size="11"  v-model="phone" >
         </div>
         <div>
-          <button class="" :disabled="bvnButtonEnabled == false">
-          Submit</button>
+          <button class="submitForm" :disabled="planSubmitButtonEnabled == false">
+          Submit Plan</button>
         </div>
     </div>
   </div>
@@ -65,6 +69,7 @@ export default {
       planList: [],
       showNibssSection: false,
       bvnButtonEnabled: false,
+      planSubmitButtonEnabled: false,
       showInvalidBVNSection: false,
       showBVNValidationErroSection: false,
       showPlanFormSection: false,
@@ -85,19 +90,51 @@ export default {
       }
     },
     validateBVN() {
-      const bvnValue = this.bvnValue.toString();
-      bvnValue.split('').forEach((character) => {
-        if ('1234567890'.indexOf(character) === -1) {
-          this.bvnValue = this.bvnValue.toString().split(character).join('');
-        }
-      });
+      this.bvnValue = this.removeNonNumeric(this.bvnValue.toString());
       if (this.bvnValue.toString().length === 11) {
         this.bvnButtonEnabled = true;
       } else {
         this.bvnButtonEnabled = false;
       }
-
-      this.showNibssSection = !!this.showNibssSection;
+    },
+    validateFormFieldsFirstName() {
+      if (this.firstName.toString().length <= 20 && this.firstName.toString().length >= 1) {
+        this.planSubmitButtonEnabled = true;
+      } else {
+        this.planSubmitButtonEnabled = false;
+      }
+    },
+    validateFormFieldsLastName() {
+      if (this.lastName.toString().length <= 20 && this.lastName.toString().length >= 1) {
+        this.planSubmitButtonEnabled = true;
+      } else {
+        this.planSubmitButtonEnabled = false;
+      }
+    },
+    validateFormFieldsEmail() {
+      if (this.email.toString().length <= 50 && this.email.toString().length >= 5) {
+        this.planSubmitButtonEnabled = true;
+      } else {
+        this.planSubmitButtonEnabled = false;
+      }
+    },
+    validateFormFieldsPhone() {
+      this.phone = this.removeNonNumeric(this.phone.toString());
+      if (this.phone.toString().length === 11) {
+        this.planSubmitButtonEnabled = true;
+      } else {
+        this.planSubmitButtonEnabled = false;
+      }
+    },
+    removeNonNumeric(bvnValue) {
+      // const bvnValue = this.bvnValue.toString();
+      let result = bvnValue;
+      bvnValue.split('').forEach((character) => {
+        if ('1234567890'.indexOf(character) === -1) {
+          result = result.split(character).join('');
+        }
+      });
+      return result;
     },
     async getBVN_details() {
       this.showInvalidBVNSection = false;
