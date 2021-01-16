@@ -19,11 +19,11 @@
           @click="getBVN_details">Validate BVN</button>
         </div>
     </div>
-    <div class="badBVN" v-if="showNibssSection">
-        <div>Bad BVN</div>
+    <div class="invalidBVN" v-if="showInvalidBVNSection">
+        <div>Invalid BVN: Please enter a validte BVN</div>
     </div>
-    <div class="errorValidatingBVN" v-if="showNibssSection">
-        <div>Error BVN</div>
+    <div class="errorValidatingBVN" v-if="showBVNValidationErroSection">
+        <div>Error BVN: Please try again, if there message continues, please contact support</div>
     </div>
   </div>
 </template>
@@ -39,6 +39,8 @@ export default {
       planList: [],
       showNibssSection: false,
       bvnButtonEnabled: false,
+      showInvalidBVNSection: false,
+      showBVNValidationErroSection: false,
       selectedPlan: '',
       bvnValue: '',
     };

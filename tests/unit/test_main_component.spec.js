@@ -86,6 +86,12 @@ describe('Validate BVN Section', () => {
   it('check if Plan Form section is visible', () => {
     expect(wrapper.find('.PlanForm').element == null).toBe(true);
   });
+  it('check if Invalid BVN section is visible', () => {
+    expect(wrapper.find('.invalidBVN').element == null).toBe(true);
+  });
+  it('check if BVN validation Error section is visible', () => {
+    expect(wrapper.find('.errorValidatingBVN').element == null).toBe(true);
+  });
 
 
   
