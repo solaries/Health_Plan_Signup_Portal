@@ -26,7 +26,7 @@ describe('Validate Plans drop down', () => {
     } while (wrapper.find('.healtPlans').element.innerHTML === '' && checkCount < 11);
     // console.log(wrapper.find('.healtPlans').element);
     expect(wrapper.find('.healtPlans').element.length > 1).toBe(true);
-  }, 10000);
+  }, 12000);
 
   it('check if NIBSS section is visible', () => {
     expect(wrapper.find('.NIBSS').element == null).toBe(true);
@@ -94,5 +94,29 @@ describe('Validate BVN Section', () => {
   it('check if BVN validation Error section is visible', () => {
     expect(wrapper.find('.errorValidatingBVN').element == null).toBe(true);
   });
-  
+  it('Validate entered BVN', async () => {
+    wrapper.find('.bvnField').setValue('12345678901');
+    wrapper.find('.bvnField').trigger('keyup');
+    // ensure the BVN field text change has affected the BVN button accordingly
+    await wrapper.vm.$nextTick();
+    // then check that BVN button is enabled
+    expect(wrapper.find('.NIBSS').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
+    wrapper.find('.bvnButton').trigger('click');
+    // ensure the BVN button click has affected the plan form, invalid BVN,
+    // or BVN validation error section accordingly
+    await wrapper.vm.$nextTick();
+
+    let checkCount = 0;
+    do {
+      await sleep(1000);
+      checkCount += 1;
+    } while ((wrapper.find('.PlanForm').element == null
+    && wrapper.find('.invalidBVN').element == null
+    && wrapper.find('.errorValidatingBVN').element == null) === true && checkCount < 11);
+
+    const effectOfBvnValidation = (wrapper.find('.PlanForm').element == null
+    && wrapper.find('.invalidBVN').element == null
+    && wrapper.find('.errorValidatingBVN').element == null);
+    expect(effectOfBvnValidation).toBe(false);
+  }, 12000);
 });
