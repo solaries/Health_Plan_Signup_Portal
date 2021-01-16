@@ -31,7 +31,19 @@
         <div><h1>Customer Informatiion Form</h1></div>
         <div>First Name</div>
         <div>
-          <input class=""  type="text" size="11" >
+          <input class="firstName"  type="text" size="20" >
+        </div>
+        <div>Last Name</div>
+        <div>
+          <input class="lastName"  type="text" size="20" >
+        </div>
+        <div>Email</div>
+        <div>
+          <input class="email"  type="text" size="50" >
+        </div>
+        <div>Phone</div>
+        <div>
+          <input class="phone"  type="text" size="11" >
         </div>
         <div>
           <button class="" :disabled="bvnButtonEnabled == false">
@@ -45,7 +57,6 @@
 const RelianceRequest = require('../lib/RelianceHMO_Requests');
 const NibssRequest = require('../lib/NIBSS_Requests');
 const Credentials = require('../lib/Credentials');
-const hash = require('../lib/Hash');
 
 export default {
   name: 'Main',
@@ -59,6 +70,10 @@ export default {
       showPlanFormSection: false,
       selectedPlan: '',
       bvnValue: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
     };
   },
   methods: {
