@@ -83,4 +83,10 @@ describe('Validate BVN Section', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.bvnField').element.value === '1A3A5B7B9c1C').toBe(false);
   });
+  it('check if Plan Form section is visible', () => {
+    expect(wrapper.find('.PlanForm').element == null).toBe(true);
+  });
+
+
+  
 });
