@@ -11,14 +11,14 @@ const trigger = async ({
 
   try {
     const { host } = credentials;
-    const OrganisationCode = Buffer.from(credentials.organisation_code || '').toString('base64');
+    const OrganisationCode = Buffer.from(credentials.organisationCode || '').toString('base64');
 
     if (credentials.aes_key && credentials.ivkey) {
       const {
-        aes_key, ivkey, password, organisation_code,
+        aesKey, ivkey, password, organisationCode,
       } = credentials;
-      encryptedBVN = hash.encrypt(JSON.stringify(payload), aes_key, ivkey);
-      bvnData = hash.BVNData(organisation_code, password);
+      encryptedBVN = hash.encrypt(JSON.stringify(payload), aesKey, ivkey);
+      bvnData = hash.BVNData(organisationCode, password);
 
       headers = {
         Authorization: bvnData.authHeader,

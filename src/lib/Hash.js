@@ -14,7 +14,7 @@ const decrypt = (text, aeskey, ivkey) => {
   const encryptedText = Buffer.from(textParts.join(':'), 'hex');
   const decipher = crypto.createDecipheriv('aes-128-cbc', Buffer.from(aeskey), ivkey);
   let decrypted = decipher.update(encryptedText);
-  decrypted = Buffer.concat([decrypted, decipher.final()]); 
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
   return decrypted.toString();
 };
 

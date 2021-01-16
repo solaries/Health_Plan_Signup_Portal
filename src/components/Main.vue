@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="plans">
+    <div class="plans"  v-if="showPlans">
         <div><h1>Avialable Plans</h1></div>
         <div>Plans List</div>
         <div>
@@ -31,23 +31,27 @@
         <div><h1>Customer Informatiion Form</h1></div>
         <div>First Name</div>
         <div>
-          <input class="firstName"  @keyup="validateFormFieldsFirstName"
+          <input class="firstName"  @keyup="validateFormFields"
            type="text" size="20" v-model="firstName" >
+           <input  class="firstNameValidFlag"   type="hidden" v-model="firstNameValidFlag" />
         </div>
         <div>Last Name</div>
         <div>
-          <input class="lastName"   @keyup="validateFormFieldsLastName"
+          <input class="lastName"   @keyup="validateFormFields"
             type="text" size="20" v-model="lastName"  >
+           <input  class="lastNameValidFlag"   type="hidden" v-model="lastNameValidFlag" />
         </div>
         <div>Email</div>
         <div>
-          <input class="email"   @keyup="validateFormFieldsEmail"
+          <input class="email"   @keyup="validateFormFields"
             type="text" size="50"  v-model="email" >
+           <input  class="emailValidFlag"   type="hidden" v-model="emailValidFlag" />
         </div>
         <div>Phone</div>
         <div>
-          <input class="phone"   @keyup="validateFormFieldsPhone"
+          <input class="phone"   @keyup="validateFormFields"
           type="text" size="11"  v-model="phone" >
+           <input  class="phoneValidFlag"   type="hidden" v-model="phoneValidFlag" />
         </div>
         <div>
           <button @click="submitForm" class="submitForm"
@@ -78,6 +82,7 @@ export default {
       showNibssSection: false,
       bvnButtonEnabled: false,
       planSubmitButtonEnabled: false,
+      showPlans: true,
       showInvalidBVNSection: false,
       showBVNValidationErroSection: false,
       showPlanFormSection: false,
@@ -89,6 +94,10 @@ export default {
       lastName: '',
       email: '',
       phone: '',
+      firstNameValidFlag: 'no',
+      lastNameValidFlag: 'no',
+      emailValidFlag: 'no',
+      phoneValidFlag: 'no',
     };
   },
   methods: {
@@ -107,34 +116,41 @@ export default {
         this.bvnButtonEnabled = false;
       }
     },
-    validateFormFieldsFirstName() {
+    validateFormFields() {
       if (this.firstName.toString().length <= 20 && this.firstName.toString().length >= 1) {
         this.planSubmitButtonEnabled = true;
+        this.firstNameValidFlag = 'yes';
       } else {
         this.planSubmitButtonEnabled = false;
+        this.firstNameValidFlag = 'no';
+        return true;
       }
-    },
-    validateFormFieldsLastName() {
       if (this.lastName.toString().length <= 20 && this.lastName.toString().length >= 1) {
         this.planSubmitButtonEnabled = true;
+        this.lastNameValidFlag = 'yes';
       } else {
         this.planSubmitButtonEnabled = false;
+        this.lastNameValidFlag = 'no';
+        return true;
       }
-    },
-    validateFormFieldsEmail() {
       if (this.email.toString().length <= 50 && this.email.toString().length >= 5) {
         this.planSubmitButtonEnabled = true;
+        this.emailValidFlag = 'yes';
       } else {
         this.planSubmitButtonEnabled = false;
+        this.emailValidFlag = 'no';
+        return true;
       }
-    },
-    validateFormFieldsPhone() {
       this.phone = this.removeNonNumeric(this.phone.toString());
       if (this.phone.toString().length === 11) {
         this.planSubmitButtonEnabled = true;
+        this.phoneValidFlag = 'yes';
       } else {
         this.planSubmitButtonEnabled = false;
+        this.phoneValidFlag = 'no';
+        return true;
       }
+      return true;
     },
     removeNonNumeric(bvnValue) {
       // const bvnValue = this.bvnValue.toString();
@@ -153,7 +169,7 @@ export default {
 
       const reset = await NibssRequest.Reset({
         sandbox_key: Credentials.sandbox_key,
-        organisation_code: Credentials.organisation_code,
+        organisationCode: Credentials.organisation_code,
         host: '',
       });
       if (reset.ivkey == null) {
@@ -162,10 +178,10 @@ export default {
         const validate = await NibssRequest.VerifySingleBVN({
           bvn: this.bvnValue.toString(),
           sandbox_key: Credentials.sandbox_key,
-          organisation_code: Credentials.organisation_code,
+          organisationCode: Credentials.organisation_code,
           password: reset.password,
           ivkey: reset.ivkey,
-          aes_key: reset.aes_key,
+          aesKey: reset.aes_key,
           host: '',
         });
         if (!validate.message === 'OK') {
@@ -179,6 +195,8 @@ export default {
       }
     },
     async submitForm() {
+      this.showPlans = true;
+      this.showNibssSection = true;
       this.showPlanFormSection = true;
       this.showFormSubmitSuccessSection = false;
       this.showFormSubmitErrorSection = false;
@@ -243,6 +261,8 @@ export default {
         this.showPlanFormSection = false;
         this.showFormSubmitSuccessSection = true;
         this.showFormSubmitErrorSection = false;
+        this.showPlans = false;
+        this.showNibssSection = false;
       } else {
         this.showPlanFormSection = true;
         this.showFormSubmitSuccessSection = false;

@@ -51,7 +51,7 @@ exports.Plans = async (data) => {
 };
 
 exports.SignUp = async (data) => {
-  try { 
+  try {
     return await trigger({
       method: 'POST',
       path: '/relianceHMO/retail/signup',
