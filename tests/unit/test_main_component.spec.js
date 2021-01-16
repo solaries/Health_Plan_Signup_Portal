@@ -222,4 +222,11 @@ describe('Validate Plan Form Section', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.PlanForm').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
   });
+  it('check if successful form submission section is visible', () => {
+    expect(wrapper.find('.formSubmitSuccessful').element == null).toBe(true);
+  });
+  it('check if successful form submission error section is visible', () => {
+    expect(wrapper.find('.formSubmitError').element == null).toBe(true);
+  });
+
 });
