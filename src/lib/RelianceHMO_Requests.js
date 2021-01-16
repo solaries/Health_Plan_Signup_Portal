@@ -51,12 +51,12 @@ exports.Plans = async (data) => {
 };
 
 exports.SignUp = async (data) => {
-  try {
+  try { 
     return await trigger({
       method: 'POST',
       path: '/relianceHMO/retail/signup',
       credentials: { ...data },
-      payload: data.payload,
+      payload: data.payload.data,
     });
   } catch (error) {
     return error;

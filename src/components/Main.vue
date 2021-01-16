@@ -50,7 +50,8 @@
           type="text" size="11"  v-model="phone" >
         </div>
         <div>
-          <button class="submitForm" :disabled="planSubmitButtonEnabled == false">
+          <button @click="submitForm" class="submitForm"
+          :disabled="planSubmitButtonEnabled == false">
           Submit Plan</button>
         </div>
     </div>
@@ -58,7 +59,8 @@
         <div>Form Submited successfully</div>
     </div>
     <div class="formSubmitError" v-if="showFormSubmitErrorSection">
-        <div>Error Submiting form: Please try again, if there message continues, please contact support</div>
+        <div>Error Submiting form: Please try again, if
+          there message continues, please contact support</div>
     </div>
   </div>
 </template>
@@ -166,24 +168,86 @@ export default {
           aes_key: reset.aes_key,
           host: '',
         });
-        if (!validate.message) {
+        if (!validate.message === 'OK') {
           this.showBVNValidationErroSection = true;
+          this.firstName = validate.data.FirstName;
+          this.lasstName = validate.data.LastName;
+          this.phone = validate.data.PhoneNumber;
         } else {
           this.showPlanFormSection = true;
         }
-/*
-    {"message":"OK","data":{"ResponseCode":"00","BVN":"12345678901","FirstName":"Uchenna",
-    "MiddleName":"Chijioke","LastName":"Nwanyanwu",
-    "DateOfBirth":"22-Oct-1970","PhoneNumber":"07033333333",
-    "RegistrationDate":"16-Nov-2014","EnrollmentBank":"900",
-    "EnrollmentBranch":"Victoria Island","WatchListed":"NO"}}
-*/
       }
-
-      // this.showInvalidBVNSection
-      // this.bvnValue.toString();
-      // this.showBVNValidationErroSection
-      // this.showPlanFormSection
+    },
+    async submitForm() {
+      this.showPlanFormSection = true;
+      this.showFormSubmitSuccessSection = false;
+      this.showFormSubmitErrorSection = false;
+      let {
+        firstName, lastName, email, phone,
+      } = this;
+      // the signup service in the sandbox is hardcoded
+      // to expect an exact structure and set of field value set
+      // this is why i am hardcodeing these values
+      firstName = 'John';
+      lastName = 'Doe';
+      email = 'testuser1@kang.pe';
+      phone = '08132646940';
+      const paramsValue = {
+        data: {
+          Referral_code: '1122345',
+          enrollees: [
+            {
+              payment_frequency: 'monthly',
+              first_name: firstName,
+              last_name: lastName,
+              email_address: email,
+              phone_number: phone,
+              plan_id: 22,
+              can_complete_profile: true,
+              dependants: [
+                {
+                  first_name: 'Janet',
+                  last_name: 'Dependant',
+                  email_address: 'testuser2@kang.pe',
+                  phone_number: '08132646940',
+                  plan_id: 22,
+                },
+                {
+                  first_name: 'Fred',
+                  last_name: 'Dependant',
+                  email_address: 'testuser3@kang.pe',
+                  phone_number: '08132646940',
+                  plan_id: 24,
+                },
+              ],
+            },
+            {
+              payment_frequency: 'q',
+              first_name: 'Ben',
+              last_name: 'Stiller',
+              email_address: 'snr22325@awsoo.com',
+              phone_number: '08132646940',
+              plan_id: 24,
+              can_complete_profile: false,
+              dependants: [],
+            },
+          ],
+        },
+      };
+      const response = await RelianceRequest.SignUp({
+        sandbox_key: Credentials.sandbox_key,
+        host: '',
+        payload: paramsValue,
+      });
+      if (response.message === 'OK') {
+        this.showPlanFormSection = false;
+        this.showFormSubmitSuccessSection = true;
+        this.showFormSubmitErrorSection = false;
+      } else {
+        this.showPlanFormSection = true;
+        this.showFormSubmitSuccessSection = false;
+        this.showFormSubmitErrorSection = true;
+      }
     },
   },
   async mounted() {

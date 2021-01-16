@@ -257,6 +257,11 @@ describe('Validate Plan Form Section', () => {
     } while ((wrapper.find('.PlanForm').element != null
     && wrapper.find('.formSubmitSuccessful').element == null
     && wrapper.find('.formSubmitError').element == null) === true && checkCount < 11);
+
+console.log(wrapper.find('.PlanForm').element);
+console.log(wrapper.find('.formSubmitSuccessful').element);
+console.log(wrapper.find('.formSubmitError').element);
+
     const effectOfFormSubmission = (wrapper.find('.PlanForm').element != null
     && wrapper.find('.formSubmitSuccessful').element == null
     && wrapper.find('.formSubmitError').element == null);
