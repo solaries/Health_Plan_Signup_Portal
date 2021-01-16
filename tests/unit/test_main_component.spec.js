@@ -102,18 +102,17 @@ describe('Validate BVN Section', () => {
     // then check that BVN button is enabled
     expect(wrapper.find('.NIBSS').element.innerHTML.indexOf('disabled="disabled"') > -1).toBe(false);
     wrapper.find('.bvnButton').trigger('click');
-    // ensure the BVN button click has affected the plan form, invalid BVN,
-    // or BVN validation error section accordingly
-    await wrapper.vm.$nextTick();
 
     let checkCount = 0;
     do {
       await sleep(1000);
+    // ensure the BVN button click has affected the plan form, invalid BVN,
+    // or BVN validation error section accordingly
+      await wrapper.vm.$nextTick();
       checkCount += 1;
     } while ((wrapper.find('.PlanForm').element == null
     && wrapper.find('.invalidBVN').element == null
     && wrapper.find('.errorValidatingBVN').element == null) === true && checkCount < 11);
-
     const effectOfBvnValidation = (wrapper.find('.PlanForm').element == null
     && wrapper.find('.invalidBVN').element == null
     && wrapper.find('.errorValidatingBVN').element == null);

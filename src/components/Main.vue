@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="plans">
-        <div>Plans</div>
+        <div><h1>Avialable Plans</h1></div>
+        <div>Plans List</div>
         <div>
           <select @change="actOnSelectedPlan"  v-model="selectedPlan" class="healtPlans">
             <option v-for="(option,index) in planList" :key="index" :text="option.name"
@@ -10,7 +11,8 @@
         </div>
     </div>
     <div class="NIBSS" v-if="showNibssSection">
-        <div>BVN</div>
+        <div><h1>BVN Validation</h1></div>
+        <div>BVN:</div>
         <div>
           <input class="bvnField" @keyup="validateBVN" type="text" size="11" v-model="bvnValue">
         </div>
@@ -25,12 +27,25 @@
     <div class="errorValidatingBVN" v-if="showBVNValidationErroSection">
         <div>Error BVN: Please try again, if there message continues, please contact support</div>
     </div>
+    <div class="PlanForm" v-if="showPlanFormSection">
+        <div><h1>Customer Informatiion Form</h1></div>
+        <div>First Name</div>
+        <div>
+          <input class=""  type="text" size="11" >
+        </div>
+        <div>
+          <button class="" :disabled="bvnButtonEnabled == false">
+          Submit</button>
+        </div>
+    </div>
   </div>
 </template>
 
 <script>
 const RelianceRequest = require('../lib/RelianceHMO_Requests');
+const NibssRequest = require('../lib/NIBSS_Requests');
 const Credentials = require('../lib/Credentials');
+const hash = require('../lib/Hash');
 
 export default {
   name: 'Main',
@@ -41,6 +56,7 @@ export default {
       bvnButtonEnabled: false,
       showInvalidBVNSection: false,
       showBVNValidationErroSection: false,
+      showPlanFormSection: false,
       selectedPlan: '',
       bvnValue: '',
     };
@@ -68,8 +84,46 @@ export default {
 
       this.showNibssSection = !!this.showNibssSection;
     },
-    getBVN_details() {
-      this.bvnValue = this.bvnValue.toString();
+    async getBVN_details() {
+      this.showInvalidBVNSection = false;
+      this.showBVNValidationErroSection = false;
+      this.showPlanFormSection = false;
+
+      const reset = await NibssRequest.Reset({
+        sandbox_key: Credentials.sandbox_key,
+        organisation_code: Credentials.organisation_code,
+        host: '',
+      });
+      if (reset.ivkey == null) {
+        this.showBVNValidationErroSection = true;
+      } else {
+        const validate = await NibssRequest.VerifySingleBVN({
+          bvn: this.bvnValue.toString(),
+          sandbox_key: Credentials.sandbox_key,
+          organisation_code: Credentials.organisation_code,
+          password: reset.password,
+          ivkey: reset.ivkey,
+          aes_key: reset.aes_key,
+          host: '',
+        });
+        if (!validate.message) {
+          this.showBVNValidationErroSection = true;
+        } else {
+          this.showPlanFormSection = true;
+        }
+/*
+    {"message":"OK","data":{"ResponseCode":"00","BVN":"12345678901","FirstName":"Uchenna",
+    "MiddleName":"Chijioke","LastName":"Nwanyanwu",
+    "DateOfBirth":"22-Oct-1970","PhoneNumber":"07033333333",
+    "RegistrationDate":"16-Nov-2014","EnrollmentBank":"900",
+    "EnrollmentBranch":"Victoria Island","WatchListed":"NO"}}
+*/
+      }
+
+      // this.showInvalidBVNSection
+      // this.bvnValue.toString();
+      // this.showBVNValidationErroSection
+      // this.showPlanFormSection
     },
   },
   async mounted() {
