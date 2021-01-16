@@ -106,8 +106,8 @@ describe('Validate BVN Section', () => {
     let checkCount = 0;
     do {
       await sleep(1000);
-    // ensure the BVN button click has affected the plan form, invalid BVN,
-    // or BVN validation error section accordingly
+      // ensure the BVN button click has affected the plan form, invalid BVN,
+      // or BVN validation error section accordingly
       await wrapper.vm.$nextTick();
       checkCount += 1;
     } while ((wrapper.find('.PlanForm').element == null
@@ -131,5 +131,11 @@ describe('Validate Plan Form Section', () => {
   });
   it('check if phone number textbox exists', async () => {
     expect(wrapper.find('.phone').element.value).toBe('');
+  });
+  it('check if phone number textbox exists', async () => {
+    expect(wrapper.find('.phone').element.value).toBe('');
+  });
+  it('check if Plan Form Submission button exists', async () => {
+    expect(wrapper.find('.submitForm').element.value).toBe('');
   });
 });
