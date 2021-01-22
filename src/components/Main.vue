@@ -4,7 +4,7 @@
         <div><label for="bvnField">BVN Validation</label></div>
         <div>BVN:</div>
         <div>
-          <input class="bvnField" @keyup="validateBVN" type="text" size="11" v-model="bvnValue">
+          <input id="bvnField" class="bvnField" @keyup="validateBVN" type="text" size="11" v-model="bvnValue">
         </div>
         <div>
           <button class="bvnButton" :disabled="bvnButtonEnabled == false"
