@@ -315,4 +315,7 @@ li {
 a {
   color: #42b983;
 }
+.bvnField{
+  margin-bottom: 20px;
+}
 </style>
