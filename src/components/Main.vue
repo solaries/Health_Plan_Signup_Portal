@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="NIBSS" v-if="showNibssSection">
-        <div><label for="bvnField">BVN Validation</label></div>
-        <div>BVN:</div>
+        <div><h1>BVN Validation</h1></div>
+        <div><label for="bvnField">BVN:</label></div>
         <div>
           <input id="bvnField" class="bvnField" @keyup="validateBVN" type="text" size="11" v-model="bvnValue">
         </div>
