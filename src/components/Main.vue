@@ -1,15 +1,5 @@
 <template>
   <div>
-    <div class="plans"  v-if="showPlans">
-        <div><h1>Avialable Plans</h1></div>
-        <div>Plans List</div>
-        <div>
-          <select @change="actOnSelectedPlan"  v-model="selectedPlan" class="healtPlans">
-            <option v-for="(option,index) in planList" :key="index" :text="option.name"
-            :value="option.value">{{ option.name }}</option>
-          </select>
-        </div>
-    </div>
     <div class="NIBSS" v-if="showNibssSection">
         <div><h1>BVN Validation</h1></div>
         <div>BVN:</div>
@@ -21,11 +11,22 @@
           @click="getBVN_details">Validate BVN</button>
         </div>
     </div>
+    <div class="plans"  v-if="showPlans">
+        <div><h1>Avialable Plans</h1></div>
+        <div>Plans List</div>
+        <div>
+          <select @change="actOnSelectedPlan"  v-model="selectedPlan" class="healtPlans">
+            <option v-for="(option,index) in planList" :key="index" :text="option.name"
+            :value="option.value">{{ option.name }}</option>
+          </select>
+        </div>
+    </div>
     <div class="invalidBVN" v-if="showInvalidBVNSection">
-        <div>Invalid BVN: Please enter a validte BVN</div>
+        <div>Invalid BVN. Please enter a validte BVN</div>
     </div>
     <div class="errorValidatingBVN" v-if="showBVNValidationErroSection">
-        <div>Error BVN: Please try again, if there message continues, please contact support</div>
+        <div>Error occured during BVN validation.
+           Please try again, if there message continues, please contact support</div>
     </div>
     <div class="PlanForm" v-if="showPlanFormSection">
         <div><h1>Customer Informatiion Form</h1></div>
@@ -79,10 +80,10 @@ export default {
   data() {
     return {
       planList: [],
-      showNibssSection: false,
+      showNibssSection: true,
       bvnButtonEnabled: false,
       planSubmitButtonEnabled: false,
-      showPlans: true,
+      showPlans: false,
       showInvalidBVNSection: false,
       showBVNValidationErroSection: false,
       showPlanFormSection: false,
@@ -101,11 +102,27 @@ export default {
     };
   },
   methods: {
+    async loadPlans() {
+      const plans = await RelianceRequest.Plans({
+        sandbox_key: Credentials.sandbox_key,
+        host: '',
+        params: { type: 'family', package: 'custom' },
+      });
+      this.planList.push({ name: 'Select Plan:.', value: '' });
+      // console.log(JSON.stringify(plans));
+      if (plans.message === 'OK') {
+        plans.data.data.plans.forEach((plan) => {
+          const { id, name } = plan;
+          this.planList.push({ name, value: id });
+          // console.log(`${id} -.- ${name}`);
+        });
+      }
+    },
     actOnSelectedPlan() {
       if (this.selectedPlan.toString().trim().length > 0) {
-        this.showNibssSection = true;
+        this.showPlanFormSection = true;
       } else {
-        this.showNibssSection = false;
+        this.showPlanFormSection = false;
       }
     },
     validateBVN() {
@@ -163,9 +180,12 @@ export default {
       return result;
     },
     async getBVN_details() {
+      this.firstName = '';
+      this.lasstName = '';
+      this.phone = '';
+      this.showPlans = false;
       this.showInvalidBVNSection = false;
       this.showBVNValidationErroSection = false;
-      this.showPlanFormSection = false;
 
       const reset = await NibssRequest.Reset({
         sandbox_key: Credentials.sandbox_key,
@@ -181,16 +201,19 @@ export default {
           organisationCode: Credentials.organisation_code,
           password: reset.password,
           ivkey: reset.ivkey,
-          aesKey: reset.aes_key,
+          aesKey: reset.aesKey,
           host: '',
         });
-        if (!validate.message === 'OK') {
-          this.showBVNValidationErroSection = true;
+        if (validate.message === 'OK') {
           this.firstName = validate.data.FirstName;
-          this.lasstName = validate.data.LastName;
+          this.lastName = validate.data.LastName;
           this.phone = validate.data.PhoneNumber;
+          this.loadPlans();
+          this.showPlans = true;
+        } else if (validate.message.indexOf('Unmatched Request,') > -1) {
+          this.showInvalidBVNSection = true;
         } else {
-          this.showPlanFormSection = true;
+          this.showBVNValidationErroSection = true;
         }
       }
     },
@@ -270,22 +293,8 @@ export default {
       }
     },
   },
-  async mounted() {
-    const plans = await RelianceRequest.Plans({
-      sandbox_key: Credentials.sandbox_key,
-      host: '',
-      params: { type: 'family', package: 'custom' },
-    });
-    this.planList.push({ name: 'Select Plan:.', value: '' });
-    // console.log(JSON.stringify(plans));
-    if (plans.message === 'OK') {
-      plans.data.data.plans.forEach((plan) => {
-        const { id, name } = plan;
-        this.planList.push({ name, value: id });
-        // console.log(`${id} -.- ${name}`);
-      });
-    }
-  },
+  // async mounted() {
+  // },
 };
 </script>
 

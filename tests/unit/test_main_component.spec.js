@@ -9,49 +9,11 @@ function sleep(ms) {
   });
 }
 
-describe('Validate Plans drop down', () => {
-  it('check if plans drop down exists', () => {
-    expect(wrapper.find('.healtPlans').element.value).toBe('');
-  });
-
-  it('wait for plan retreival, check plans dropdown population', async () => {
-    /* when the component loads it does a http get to retreive plans. 
-    these plans (at least one) would be loaded to the plans dropdown. the test finishes before 
-    the HTTP request is complete. This loop makes the test wait for the HTTP request to compele
-    */ 
-    let checkCount = 0;
-    do {
-      await sleep(1000);
-      checkCount += 1;
-    } while (wrapper.find('.healtPlans').element.innerHTML === '' && checkCount < 11);
-    // console.log(wrapper.find('.healtPlans').element);
-    expect(wrapper.find('.healtPlans').element.length > 1).toBe(true);
-  }, 12000);
-
-  it('check if NIBSS section is visible', () => {
-    expect(wrapper.find('.NIBSS').element == null).toBe(true);
-  });
-  it('select plan and result in th NIBSS sectin being visible', async () => {
-    wrapper.find('.healtPlans').element[1].selected = true;
-    wrapper.find('.healtPlans').trigger('change');
-    // ensure the v-if of the  NIBSS section to validates and renders changes
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find('.NIBSS').element == null).toBe(false);
-  });
-  it('select no plan and result in the NIBSS section being invisible', async () => {
-    wrapper.find('.healtPlans').element[0].selected = true;
-    wrapper.find('.healtPlans').trigger('change');
-    // ensure the v-if of the  NIBSS section to validates and renders changes
-    await wrapper.vm.$nextTick();
-    expect(wrapper.find('.NIBSS').element == null).toBe(true);
-  });
-});
 describe('Validate BVN Section', () => {
+  it('check if NIBSS section is visible', () => {
+    expect(wrapper.find('.NIBSS').element != null).toBe(true);
+  });
   it('check if BVN textbox exists', async () => {
-    wrapper.find('.healtPlans').element[1].selected = true;
-    wrapper.find('.healtPlans').trigger('change');
-    // ensure the v-if of the  NIBSS section to validates and renders changes
-    await wrapper.vm.$nextTick();
     expect(wrapper.find('.bvnField').element.value).toBe('');
   });
   it('check if BVN validation button exists', async () => {
@@ -85,8 +47,8 @@ describe('Validate BVN Section', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.find('.bvnField').element.value === '1A3A5B7B9c1C').toBe(false);
   });
-  it('check if Plan Form section is visible', () => {
-    expect(wrapper.find('.PlanForm').element == null).toBe(true);
+  it('check if Available plans section is visible', () => {
+    expect(wrapper.find('.showPlans').element == null).toBe(true);
   });
   it('check if Invalid BVN section is visible', () => {
     expect(wrapper.find('.invalidBVN').element == null).toBe(true);
@@ -113,27 +75,63 @@ describe('Validate BVN Section', () => {
     } while ((wrapper.find('.PlanForm').element == null
     && wrapper.find('.invalidBVN').element == null
     && wrapper.find('.errorValidatingBVN').element == null) === true && checkCount < 11);
-    const effectOfBvnValidation = (wrapper.find('.PlanForm').element == null
+    const effectOfBvnValidation = (wrapper.find('.plans').element == null
     && wrapper.find('.invalidBVN').element == null
     && wrapper.find('.errorValidatingBVN').element == null);
     expect(effectOfBvnValidation).toBe(false);
   }, 12000);
 });
+
+describe('Validate Plans drop down', () => {
+  it('check if plans drop down exists', () => {
+    expect(wrapper.find('.healtPlans').element.value).toBe('');
+  });
+
+  it('wait for plan retreival, check plans dropdown population', async () => {
+    /* when the section loads it does a http get to retreive plans.
+    these plans (at least one) would be loaded to the plans dropdown. the test finishes before
+    the HTTP request is complete. This loop makes the test wait for the HTTP request to compele
+    */ 
+    let checkCount = 0;
+    do {
+      await sleep(1000);
+      checkCount += 1;
+    } while (wrapper.find('.healtPlans').element.innerHTML === '' && checkCount < 11); 
+    expect(wrapper.find('.healtPlans').element.length > 1).toBe(true);
+  }, 12000);
+
+  it('select plan and result in the plan form sectin being visible', async () => {
+    wrapper.find('.healtPlans').element[1].selected = true;
+    wrapper.find('.healtPlans').trigger('change');
+    // ensure the v-if of the  NIBSS section to validates and renders changes
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element == null).toBe(false);
+  });
+  it('select no plan and result in the plan form section being invisible', async () => {
+    wrapper.find('.healtPlans').element[0].selected = true;
+    wrapper.find('.healtPlans').trigger('change');
+    // ensure the v-if of the  NIBSS section to validates and renders changes
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.PlanForm').element == null).toBe(true);
+    // ensure plan form section is visible for purpose of other tests
+    wrapper.find('.healtPlans').element[1].selected = true;
+    wrapper.find('.healtPlans').trigger('change');
+    await wrapper.vm.$nextTick();
+  });
+});
+
 describe('Validate Plan Form Section', () => {
   it('check if first name textbox exists', async () => {
-    expect(wrapper.find('.firstName').element.value).toBe('');
+    expect(wrapper.find('.firstName').element.value).toBe('Uchenna');
   });
   it('check if last name textbox exists', async () => {
-    expect(wrapper.find('.lastName').element.value).toBe('');
+    expect(wrapper.find('.lastName').element.value).toBe('Nwanyanwu');
   });
   it('check if email textbox exists', async () => {
     expect(wrapper.find('.email').element.value).toBe('');
   });
   it('check if phone number textbox exists', async () => {
-    expect(wrapper.find('.phone').element.value).toBe('');
-  });
-  it('check if phone number textbox exists', async () => {
-    expect(wrapper.find('.phone').element.value).toBe('');
+    expect(wrapper.find('.phone').element.value).toBe('07033333333');
   });
   it('check if Plan Form Submission button exists', async () => {
     expect(wrapper.find('.submitForm').element.value).toBe('');

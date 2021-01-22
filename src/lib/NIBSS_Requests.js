@@ -12,14 +12,12 @@ const trigger = async ({
   try {
     const { host } = credentials;
     const OrganisationCode = Buffer.from(credentials.organisationCode || '').toString('base64');
-
-    if (credentials.aes_key && credentials.ivkey) {
+    if (credentials.aesKey && credentials.ivkey) {
       const {
         aesKey, ivkey, password, organisationCode,
       } = credentials;
       encryptedBVN = hash.encrypt(JSON.stringify(payload), aesKey, ivkey);
       bvnData = hash.BVNData(organisationCode, password);
-
       headers = {
         Authorization: bvnData.authHeader,
         SIGNATURE: bvnData.signatureHeader,
@@ -44,17 +42,19 @@ const trigger = async ({
       path,
       options,
     });
+
     if (response.statusCode !== 200) {
-      return new ApiErrors(Handler.Api(response.statusCode));
+      return new ApiErrors(Handler.Api(response.statusCode,
+        hash.decrypt(response.body, credentials.aesKey, credentials.ivkey)));
     }
     if (response.body) {
-      return JSON.parse(hash.decrypt(response.body, credentials.aes_key, credentials.ivkey));
+      return JSON.parse(hash.decrypt(response.body, credentials.aesKey, credentials.ivkey));
     }
 
     return {
       password: response.headers.password,
       ivkey: response.headers.ivkey,
-      aes_key: response.headers.aes_key,
+      aesKey: response.headers.aes_key,
     };
   } catch (error) {
     if (error.statusCode) {
