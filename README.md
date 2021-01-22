@@ -1,4 +1,7 @@
 # Health_Plan_Signup_Portal
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b6a70ecc44f44b34ab23a0f8918020dd)](https://app.codacy.com/gh/solaries/Health_Plan_Signup_Portal?utm_source=github.com&utm_medium=referral&utm_content=solaries/Health_Plan_Signup_Portal&utm_campaign=Badge_Grade)
+
 FSI Assesment: A platform where customers can signup for health insurance plans
 
 The application is a single page application with the following functionality:
